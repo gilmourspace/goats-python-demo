@@ -139,3 +139,69 @@ print(status == 0 ? "Success" : "Failure. Exit code: \(status)")
 ```swift
 let command = "pip install library"; let task = Process(); task.executableURL = URL(fileURLWithPath: "/usr/bin/env"); task.arguments = command.components(separatedBy: " "); try task.run(); task.waitUntilExit(); let status = task.terminationStatus;  print(status == 0 ? "Success" : "Failure. Exit code: \(status)");
 ```
+
+## Creating an executable for testing locally
+In order to test the script locally you will need to create an executable.
+1. Add the following to the `Package.swift` file:
+
+**products:**
+```swift
+.executable(name: "goats-python-demo", targets: ["goats-python-demo"]),
+```
+**targets:**
+```swift
+.executableTarget(name: "goats-python-demo", dependencies: ["GoatsPythonDemo"])
+```
+
+The resulting Package.swift should look like this:
+```swift
+// swift-tools-version: 5.9
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
+import PackageDescription
+
+let package = Package(
+    name: "GoatsPythonDemo",
+    products: [
+        // Products define the executables and libraries produced by a package, and make them visible to other packages.
+        .library(name: "GoatsPythonDemo", targets: ["GoatsPythonDemo"]),
+        .executable(name: "goats-python-demo", targets: ["goats-python-demo"]),
+    ],
+    dependencies: [
+        // Dependencies declare other packages that this package depends on.
+        .package(url: "https://github.com/pvieito/PythonKit.git", branch: "master"),
+    ],
+    targets: [
+        // Targets are the basic building blocks of a package, defining a module or a test suite.
+        // Targets can depend on other targets in this package and products from dependencies.
+        .target(name: "GoatsPythonDemo", dependencies: ["PythonKit"]),
+        .executableTarget(name: "goats-python-demo", dependencies: ["GoatsPythonDemo"]),
+    ]
+)
+```
+2. Create a new file `Sources/goats-python-demo/main.swift`
+```
+.
+├── Package.resolved
+├── Package.swift
+├── README.md
+├── Sources
+│   ├── goats-python-demo
+│   │   └── main.swift
+│   └── GoatsPythonDemo
+│       └── GoatsPythonDemo.swift
+└── Tests
+    └── GoatsPythonDemoTests
+        └── GoatsPythonDemoTests.swift
+```
+
+3. Add the following code to the `Sources/goats-python-demo/main.swift`:
+```swift
+import GoatsPythonDemo
+GoatsPythonDemo.run()
+```
+
+4. That's it! You can now run the package locally by running:
+```bash
+swift run
+```

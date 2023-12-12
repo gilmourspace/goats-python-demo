@@ -1,0 +1,2 @@
+import GoatsPythonDemo
+GoatsPythonDemo.run()
