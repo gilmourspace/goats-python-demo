@@ -4,6 +4,8 @@ A demonstration of how to integrate a python library into a goats script.
 # Creating a goats script utilising a python library.
 GOATS is able to pull git repos to generate test-script. Currently this is only supported with swift packages. This will guide you through how to create a swift package with a python library that is ready to be run.
 
+This functionality uses a library called [PythonKit](https://github.com/pvieito/PythonKit) Whih allows swift to use python libraries. This means that any python library can be used in a GOATS script. See the PythonKit documentation for more information.
+
 ## Dependencies
 In order to create the swift package you will need to have swift installed. There are a few ways to install swift:
 - [swift.org](https://swift.org/download/)
